@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c4993fc6-0e86-4700-ab44-fe16dbd7e1fe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/ServiceProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/ServiceProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/back/Store.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.java" afterDir="false" />
-    </list>
+    <list default="true" id="c4993fc6-0e86-4700-ab44-fe16dbd7e1fe" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +14,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="433">
-              <caret line="74" column="45" selection-start-line="74" selection-start-column="45" selection-end-line="74" selection-end-column="45" />
+            <state relative-caret-position="258">
+              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1103#1111#0" expanded="true" />
@@ -498,8 +492,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ro/utcn/pt/assignment2/front/ApplicationUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="74" column="45" selection-start-line="74" selection-start-column="45" selection-end-line="74" selection-end-column="45" />
+        <state relative-caret-position="258">
+          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1103#1111#0" expanded="true" />
