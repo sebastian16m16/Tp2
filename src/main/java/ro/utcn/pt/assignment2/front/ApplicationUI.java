@@ -9,9 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ApplicationUI {
-    private final Store store;
+    private Store store;
     private JPanel panelMail;
     private JList q1;
     private JList q2;
@@ -28,22 +29,68 @@ public class ApplicationUI {
     private DefaultListModel<Client> q2List = new DefaultListModel<>();
     private DefaultListModel<Client> q3List = new DefaultListModel<>();
     private DefaultListModel<Client> q4List = new DefaultListModel<>();
+    private DefaultListModel<Client> waitingListModel = new DefaultListModel<Client>();
+
+
+    AtomicBoolean cancelationFlag = new AtomicBoolean();
 
     private Map<String, DefaultListModel> mapLists = new HashMap<>();
 
     public ApplicationUI() throws InterruptedException {
-        this.store = new Store(4, 50, this);
+        this.initialize();
 
-        this.initializeMapLists();
-
+        ApplicationUI self = this;
         startStoreButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clearValues();
+
+                cancelationFlag = new AtomicBoolean(true);
+                try {
+                    store = new Store(4, 50, self, cancelationFlag);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+
+                super.mouseClicked(e);
+                new Thread(store).start();
+            }
+        });
+        stopStoreButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                new Thread(store).run();
+                cancelationFlag.set(false);
             }
         });
+        generateButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                if ((int) numberOfClients.getValue() > 0 && (int) numberOfClients.getValue() < 50) {
+                    try {
+                        store.generateClients((int)numberOfClients.getValue(), false);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void clearValues() {
+        for (Map.Entry<String, DefaultListModel> v : this.mapLists.entrySet()){
+            v.getValue().clear();
+        }
+
+        if (this.store != null && this.store.clients != null) {
+            this.store.clients.clear();
+        }
+
+        this.waitingClients.setModel(new DefaultListModel());
+        this.log.setText("");
     }
 
     public static void main(String[] args) {
@@ -80,7 +127,7 @@ public class ApplicationUI {
         this.log.append(log.message + "\n");
     }
 
-    private void initializeMapLists() {
+    private void initialize() {
         q1.setModel(q1List);
         q2.setModel(q2List);
         q3.setModel(q3List);
@@ -93,11 +140,12 @@ public class ApplicationUI {
     }
 
     private void setupWaitingClients() {
-        DefaultListModel<Client> listModel = new DefaultListModel<Client>();
-        for (Client c : store.clients) {
-            listModel.addElement(c);
+        this.waitingListModel = new DefaultListModel<>();
+
+        for (Object c : store.clients.toArray()) {
+            waitingListModel.addElement((Client)c);
         }
 
-        waitingClients.setModel(listModel);
+        this.waitingClients.setModel(this.waitingListModel);
     }
 }
