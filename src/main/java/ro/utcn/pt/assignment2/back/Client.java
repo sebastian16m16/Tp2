@@ -3,8 +3,7 @@ package ro.utcn.pt.assignment2.back;
 import java.util.Random;
 
 public class Client {
-
-    long id;
+    static long id = 0;
     int arrivalTime;
     int serviceTime;
     
