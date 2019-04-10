@@ -1,19 +1,22 @@
 package ro.utcn.pt.assignment2.back;
 
+import java.time.LocalTime;
 import java.util.Random;
 
 public class Client {
-    static long id = 0;
-    int arrivalTime;
+    static long idCounter = 0;
+
+    static long id;
+    LocalTime arrivalTime;
     int serviceTime;
     
 
-    public Client(long iD2, int AT){
-        this.id = iD2;
-        this.arrivalTime = AT;
+    public Client(LocalTime arrivalTime){
+        this.id = idCounter++;
+        this.arrivalTime = arrivalTime;
         
         Random r = new Random();
-    	this.serviceTime = r.nextInt(((1000 - 60) + 1)+ 60);
+    	this.serviceTime = r.nextInt(3) + 2;
     }
 
 
@@ -21,11 +24,9 @@ public class Client {
 		return id;
 	}
 
-
-	public int getArrivalTime() {
+	public LocalTime getArrivalTime() {
 		return arrivalTime;
 	}
-
 
 	public int getServiceTime() {
 		return serviceTime;
@@ -36,6 +37,6 @@ public class Client {
 	}
     
 	public String toString() {
-		return "Client with id: "+id + " AT: " +arrivalTime + " ST: " + serviceTime;
+		return "Client with id: " + id + " AT: " +arrivalTime + " ST: " + serviceTime;
 	}
 }

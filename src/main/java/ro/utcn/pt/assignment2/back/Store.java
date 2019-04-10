@@ -1,63 +1,62 @@
 package ro.utcn.pt.assignment2.back;
 
 
+import javafx.application.Application;
+import ro.utcn.pt.assignment2.front.ApplicationUI;
 
-public class Store extends Thread {
+import javax.swing.*;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
-    private Queue q[];
-    private int queues;
-    static long ID =0;
-    private int nr_clients;//Numar clienti care trebuie deserviti de catre ghisee
-   
-    public Store( int queues, Queue q[], String name, int nr_clients ){
-    
-        setName(name);
-        this.queues = queues;
-        this.q = new Queue[queues];
-        this.nr_clients = nr_clients;
-        for( int i=0; i<queues; i++){
-        this.q[i] =q[i] ; 
+public class Store implements Runnable {
+    private final ApplicationUI ui;
+    ArrayList<ServiceProcessor> queues = new ArrayList<>();
+    public BlockingQueue<Client> clients = new ArrayBlockingQueue<Client>(50);
 
-        }
-    }
- 
-    private int min_index (){
-    int index = 0;
-        try
-        {
-            long min = q[0].getSize();
-
-            for( int i=1; i<queues; i++){
-                long lung = q[ i ].getSize();
-
-            if ( lung < min ){
-            min = lung;
-            index = i;
-            }
-            }
-        }
-            catch( InterruptedException e ){
-            System.out.println( e.toString());
-        }
-        return index;
+    public Store(int queues, int nrOfClients, ApplicationUI ui) throws InterruptedException {
+        generateQueues(queues);
+        generateClients(nrOfClients, false);
+        this.ui = ui;
     }
 
-    public void run(){
-        try
-        {
-            int i=0;
-            while( i < nr_clients ){
-                i++;
-                Client c = new Client( ++ID, 15);
-                int m = min_index();
-                System.out.println("Client :" +Long.toString( ID )+" added to queue "+
-                Integer.toString(m));
-                q[ m ].enqueue(c);
-                sleep( (int) (Math.random()*1000) );
+    private void generateQueues(int nrOfQueues) {
+        for (int i = 0; i < nrOfQueues; i++) {
+            queues.add(new ServiceProcessor("Q" + i, clients, this));
+        }
+    }
+
+    public void GetLog(Log log) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ui.react(log);
+            }
+        });
+    }
+
+    private void generateClients(int nrOfClients, boolean sleep) throws InterruptedException {
+        for(int i = 0 ; i < nrOfClients; i++) {
+            Client c = new Client(LocalTime.now());
+            clients.add(c);
+            if (sleep) {
+                Thread.sleep((int)(Math.random() * 3) + 100);
             }
         }
-            catch( InterruptedException e ){
-            System.out.println( e.toString());
-        }
-    } 
     }
+
+    public void run() {
+        for(ServiceProcessor sp : queues){
+            new Thread(sp).run();
+        }
+
+        while (true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
